@@ -38,13 +38,14 @@ function verifyToken(req) {
  * @param {object} res Cloud Function response context.
  */
 function sendResponse(req, res) {
-  console.log(`RESPONSE[${config.slack.response_type}] ${JSON.stringify(response)}`);
+  console.log(`RESPONSE ${JSON.stringify(response)}`);
   if (config.slack.response_type === 'dialog') {
     res.send();
     slack.dialog.open({
-      trigger_id: req.body.trigger_id,
-      dialog: response
-    });
+        trigger_id: req.body.trigger_id,
+        dialog: response
+      })
+      .catch(console.log);
   }
   else {
     res.json(response);

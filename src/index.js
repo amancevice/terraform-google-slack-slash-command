@@ -1,5 +1,7 @@
 const config = require('./config.json');
 const response = require('./response.json');
+const { WebClient } = require('@slack/client');
+const slack = new WebClient(config.slack.web_api_token)
 
 /**
  * Log request info.
@@ -35,9 +37,18 @@ function verifyToken(req) {
  *
  * @param {object} res Cloud Function response context.
  */
-function sendResponse(res) {
-  console.log(JSON.stringify(response));
-  res.json(response);
+function sendResponse(req, res) {
+  console.log(`RESPONSE[${config.slack.response_type}] ${JSON.stringify(response)}`);
+  if (config.slack.response_type === 'dialog') {
+    res.send();
+    slack.dialog.open({
+      trigger_id: req.body.trigger_id,
+      dialog: response
+    });
+  }
+  else {
+    res.json(response);
+  }
 }
 
 /**
@@ -62,6 +73,6 @@ exports.slashCommand = (req, res) => {
   Promise.resolve(req)
     .then(logRequest)
     .then(verifyToken)
-    .then((req) => sendResponse(res))
+    .then((req) => sendResponse(req, res))
     .catch((err) => sendError(err, res));
 }

@@ -14,6 +14,8 @@ data "template_file" "config" {
   template = "${file("${path.module}/src/config.tpl")}"
 
   vars {
+    response_type      = "${var.response_type}"
+    web_api_token      = "${var.web_api_token}"
     verification_token = "${var.verification_token}"
   }
 }

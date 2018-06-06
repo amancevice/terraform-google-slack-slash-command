@@ -4,6 +4,7 @@
   "description": "Generic Slack slash command",
   "main": "index.js",
   "dependencies": {
+    "@slack/client": "^4.2.0"
   },
   "devDependencies": {
     "gulp": "^4.0.0"

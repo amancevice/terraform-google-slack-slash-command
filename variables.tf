@@ -6,6 +6,10 @@ variable "function_name" {
   description = "Cloud Function for publishing events from Slack to Pub/Sub."
 }
 
+variable "web_api_token" {
+  description = "Slack Web API token."
+}
+
 variable "verification_token" {
   description = "Slack verification token."
 }
@@ -32,4 +36,9 @@ variable "response" {
   default {
     text = "OK"
   }
+}
+
+variable "response_type" {
+  description = "Response type of command."
+  default     = "direct"
 }

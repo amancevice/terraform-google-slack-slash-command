@@ -2,6 +2,10 @@ variable "bucket_name" {
   description = "Cloud Storage bucket for storing Cloud Function code archives."
 }
 
+variable "function_name" {
+  description = "Cloud Function for publishing events from Slack to Pub/Sub."
+}
+
 variable "verification_token" {
   description = "Slack verification token."
 }
@@ -9,11 +13,6 @@ variable "verification_token" {
 variable "bucket_prefix" {
   description = "Prefix for Cloud Storage bucket."
   default     = ""
-}
-
-variable "function_name" {
-  description = "Cloud Function for publishing events from Slack to Pub/Sub."
-  default     = "slack-drive-slash-command"
 }
 
 variable "memory" {

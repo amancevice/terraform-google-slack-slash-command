@@ -1,6 +1,6 @@
 {
   "name": "slack-slash-command",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generic Slack slash command",
   "main": "index.js",
   "dependencies": {

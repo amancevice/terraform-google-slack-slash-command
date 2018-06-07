@@ -1,3 +1,6 @@
+/**
+ * Required Variables
+ */
 variable "bucket_name" {
   description = "Cloud Storage bucket for storing Cloud Function code archives."
 }
@@ -14,6 +17,9 @@ variable "verification_token" {
   description = "Slack verification token."
 }
 
+/**
+ * Optional Variables
+ */
 variable "bucket_prefix" {
   description = "Prefix for Cloud Storage bucket."
   default     = ""

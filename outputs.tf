@@ -3,7 +3,7 @@ output "version" {
   value       = "${local.version}"
 }
 
-output "slash_command_url" {
-  description = "Endpoint for slash commands to configure in Slack."
+output "request_url" {
+  description = "Slack slash command Request URL."
   value       = "${google_cloudfunctions_function.function.https_trigger_url}"
 }

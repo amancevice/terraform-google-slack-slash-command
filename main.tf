@@ -7,7 +7,7 @@ provider "template" {
 }
 
 locals {
-  version = "0.1.0"
+  version = "0.2.0"
 }
 
 data "template_file" "config" {
@@ -17,6 +17,14 @@ data "template_file" "config" {
     response_type      = "${var.response_type}"
     web_api_token      = "${var.web_api_token}"
     verification_token = "${var.verification_token}"
+  }
+}
+
+data "template_file" "package" {
+  template = "${file("${path.module}/src/package.tpl")}"
+
+  vars {
+    version = "${local.version}"
   }
 }
 
@@ -35,7 +43,7 @@ data "archive_file" "archive" {
   }
 
   source {
-    content  = "${file("${path.module}/package.json")}"
+    content  = "${data.template_file.package.rendered}"
     filename = "package.json"
   }
 

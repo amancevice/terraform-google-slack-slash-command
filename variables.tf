@@ -1,14 +1,4 @@
-/**
- * Required Variables
- */
-variable "bucket_name" {
-  description = "Cloud Storage bucket for storing Cloud Function code archives."
-}
-
-variable "function_name" {
-  description = "Cloud Function for publishing events from Slack to Pub/Sub."
-}
-
+// Slack
 variable "web_api_token" {
   description = "Slack Web API token."
 }
@@ -17,12 +7,19 @@ variable "verification_token" {
   description = "Slack verification token."
 }
 
-/**
- * Optional Variables
- */
+// Cloud Storage
+variable "bucket_name" {
+  description = "Cloud Storage bucket for storing Cloud Function code archives."
+}
+
 variable "bucket_prefix" {
   description = "Prefix for Cloud Storage bucket."
   default     = ""
+}
+
+// Cloud Function
+variable "function_name" {
+  description = "Cloud Function for publishing events from Slack to Pub/Sub."
 }
 
 variable "memory" {

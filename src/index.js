@@ -1,3 +1,4 @@
+const auth = require('./auth.json');
 const config = require('./config.json');
 const response = require('./response.json');
 const { WebClient } = require('@slack/client');
@@ -33,21 +34,52 @@ function verifyToken(req) {
 }
 
 /**
+ * Verify slash command was executed from authorized channel.
+ *
+ * @param {string} channel Slack channel ID
+ */
+function verifyChannel(channel) {
+  return auth.channels.exclude.indexOf(channel) < 0 &&
+        (auth.channels.include.length == 0 ||
+         auth.channels.include.indexOf(channel) >= 0)
+}
+
+/**
+ * Verify user is authorized to execute slash command.
+ *
+ * @param {string} channel Slack channel ID
+ */
+function verifyUser(user) {
+  return auth.users.exclude.indexOf(user) < 0 &&
+        (auth.users.include.length == 0 ||
+         auth.users.include.indexOf(user) >= 0)
+}
+
+/**
  * Send message back to issuer.
  *
  * @param {object} res Cloud Function response context.
  */
 function sendResponse(req, res) {
-  console.log(`RESPONSE ${JSON.stringify(response)}`);
-  if (config.slack.response_type === 'dialog') {
+  if (!verifyChannel(req.body.channel_id)) {
+    console.log(`CHANNEL PERMISSION DENIED`);
+    res.json(auth.channels.permission_denied);
+  }
+  else if (!verifyUser(req.body.user_id)) {
+    console.log(`USER PERMISSION DENIED`);
+    res.json(auth.users.permission_denied);
+  }
+  else if (config.slack.response_type === 'dialog') {
+    console.log(`DIALOG ${JSON.stringify(response)}`);
     res.send();
     slack.dialog.open({
         trigger_id: req.body.trigger_id,
         dialog: response
       })
-      .catch(console.log);
+      .catch(console.error);
   }
   else {
+    console.log(`RESPONSE ${JSON.stringify(response)}`);
     res.json(response);
   }
 }

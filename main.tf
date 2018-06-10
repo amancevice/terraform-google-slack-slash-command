@@ -7,7 +7,20 @@ provider "template" {
 }
 
 locals {
-  version = "0.2.0"
+  version = "0.3.0"
+
+  auth {
+    channels {
+      permission_denied = "${var.auth_channels_permission_denied}"
+      exclude           = ["${var.auth_channels_exclude}"]
+      include           = ["${var.auth_channels_include}"]
+    }
+    users {
+      permission_denied = "${var.auth_users_permission_denied}"
+      exclude           = ["${var.auth_users_exclude}"]
+      include           = ["${var.auth_users_include}"]
+    }
+  }
 }
 
 data "template_file" "config" {
@@ -31,6 +44,11 @@ data "template_file" "package" {
 data "archive_file" "archive" {
   type        = "zip"
   output_path = "${path.module}/dist/${var.function_name}-${local.version}.zip"
+
+  source {
+    content  = "${jsonencode("${local.auth}")}"
+    filename = "auth.json"
+  }
 
   source {
     content  = "${data.template_file.config.rendered}"
@@ -60,14 +78,14 @@ resource "google_storage_bucket_object" "archive" {
 }
 
 resource "google_cloudfunctions_function" "function" {
-  name                  = "${var.function_name}"
-  description           = "Slack slash command"
   available_memory_mb   = "${var.memory}"
+  description           = "Slack slash command"
+  entry_point           = "slashCommand"
+  name                  = "${var.function_name}"
   source_archive_bucket = "${var.bucket_name}"
   source_archive_object = "${google_storage_bucket_object.archive.name}"
-  trigger_http          = true
   timeout               = "${var.timeout}"
-  entry_point           = "slashCommand"
+  trigger_http          = true
 
   labels {
     deployment-tool = "terraform"

@@ -7,7 +7,7 @@ provider "template" {
 }
 
 locals {
-  version = "0.3.0"
+  version = "0.3.1"
 
   auth {
     channels {
@@ -79,15 +79,12 @@ resource "google_storage_bucket_object" "archive" {
 
 resource "google_cloudfunctions_function" "function" {
   available_memory_mb   = "${var.memory}"
-  description           = "Slack slash command"
+  description           = "${var.description}"
   entry_point           = "slashCommand"
+  labels                = "${var.labels}"
   name                  = "${var.function_name}"
   source_archive_bucket = "${var.bucket_name}"
   source_archive_object = "${google_storage_bucket_object.archive.name}"
   timeout               = "${var.timeout}"
   trigger_http          = true
-
-  labels {
-    deployment-tool = "terraform"
-  }
 }

@@ -1,3 +1,8 @@
+// Google Cloud
+variable "bucket_name" {
+  description = "Cloud Storage bucket for storing Cloud Function code archives."
+}
+
 // Slack
 variable "web_api_token" {
   description = "Slack Web API token."
@@ -5,16 +10,6 @@ variable "web_api_token" {
 
 variable "verification_token" {
   description = "Slack verification token."
-}
-
-// Cloud Storage
-variable "bucket_name" {
-  description = "Cloud Storage bucket for storing Cloud Function code archives."
-}
-
-variable "bucket_prefix" {
-  description = "Prefix for Cloud Storage bucket."
-  default     = ""
 }
 
 // Cloud Function
@@ -47,27 +42,6 @@ variable "timeout" {
 }
 
 // App
-/*
-variable "auth" {
-  description = "Model for limiting authorization to slash command"
-  type        = "map"
-
-  default {
-
-    channels {
-      message = "Sorry, you aren't allowed to do that in this channel."
-      include = []
-      exclude = []
-    }
-
-    users {
-      message = "Sorry, you don't have permission to do that."
-      exclude = []
-      include = []
-    }
-  }
-}
-*/
 variable "auth_channels_exclude" {
   description = "Optional list of Slack channel IDs to blacklist."
   type        = "list"

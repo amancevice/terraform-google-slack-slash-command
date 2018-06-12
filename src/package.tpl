@@ -2,6 +2,6 @@
   "name": "slack-slash-command",
   "version": "${version}",
   "dependencies": {
-    "@slack/client": "^4.2.0"
+    "@slack/client": "^4.3.1"
   }
 }

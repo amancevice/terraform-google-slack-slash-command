@@ -7,7 +7,7 @@ provider "template" {
 }
 
 locals {
-  version = "0.3.1"
+  version = "0.4.0"
 
   auth {
     channels {
@@ -73,7 +73,7 @@ data "archive_file" "archive" {
 
 resource "google_storage_bucket_object" "archive" {
   bucket = "${var.bucket_name}"
-  name   = "${var.bucket_prefix}${var.function_name}-${local.version}.zip"
+  name   = "${var.bucket_prefix}${var.function_name}-${local.version}-${md5(file("${data.archive_file.archive.output_path}"))}.zip"
   source = "${data.archive_file.archive.output_path}"
 }
 
